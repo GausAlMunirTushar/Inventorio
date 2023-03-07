@@ -1,6 +1,6 @@
 const userCreate = async (request, dataModel) => {
     try{
-        let postBody = reqeust.body;
+        let postBody = request.body;
         let data = await dataModel.create(postBody)
         return {
             status: "success",
