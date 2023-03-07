@@ -1,4 +1,4 @@
-const OTPModel = require('../../models/otpModel')
+const OTPModel = require('../../models/user/otpModel')
 const userReset = async () => {
     let email = Request.body['email'];
     let OTPCode = Request.body['OTP'];
