@@ -1,0 +1,23 @@
+const userVerifyOtp = async (request, dataModel) => {
+    try{
+        let email = request.params.email;
+        let OTPCode = request.params.otp;
+        let status = 0;
+        let statusUpdate = 1;
+             //Database First Process
+        let OTPCount = await dataModel.aggregate([{$match: {email: email, otp: OTPCode, status: status,}}, {$count: "total"}])
+        if(OTPCount.length > 0){
+             // Second Process
+             let OTPUpdate = await DataModel.updateOne({email: email, otp: OTPCode, status: status}, {email: email, otp: OTPCode, status: statusUpdate})
+             return {status: "success", data: OTPUpdate}
+        }else {
+
+            return  {status: "fail", data: "Invalid OTP Code"}
+       }
+    }
+    catch (error) {
+        return {status: "fail", data: error.toString()}
+    }
+}
+
+module.exports = userVerifyOtp;
