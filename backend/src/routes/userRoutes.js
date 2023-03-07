@@ -1,15 +1,22 @@
 const express = require('express');
+const Auth = require('../middlewares/auth')
 const userRoutes = express.Router();
 const {
     registration, 
     login, 
-    profileUpdate} = require('../controllers/user/userController')
+    profileUpdate,
+    profileDetails,
+    recoverVerifyEmail,
+    recoverVerifyOtp,
+    recoverReset} = require('../controllers/user/userController')
 
-userRoutes.post('/registration', registration)
-
-userRoutes.get('/', (req, res) => {
-    res.status(200).json({status: "success"
-    })
-})
+// User Routes
+userRoutes.post('/registration', registration);
+userRoutes.post('/login', login);
+userRoutes.post('/profileUpdate', Auth, profileUpdate);
+userRoutes.get('/profileDetails', Auth, profileDetails);
+userRoutes.get('/recoverVerifyEmail/:email', recoverVerifyEmail)
+userRoutes.get('/recoverVerifyOtp/:email/:otp', recoverVerifyOtp)
+userRoutes.post('/recoverReset', recoverReset)
 
 module.exports = userRoutes;

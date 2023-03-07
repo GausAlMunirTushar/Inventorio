@@ -37,6 +37,10 @@ const recoverVerifyOtp = async (req, res) => {
     let result = await userVerifyOtp (req, userModel)
     res.status(200).json(result)
 }
+const recoverReset = async (req, res) => {
+    let result = await userReset(req, userModel)
+    res.status(200).json(result)
+}
 
 module.exports = {
     registration,
@@ -44,5 +48,6 @@ module.exports = {
     profileUpdate,
     profileDetails,
     recoverVerifyEmail,
-    recoverVerifyOtp
+    recoverVerifyOtp,
+    recoverReset
 }
