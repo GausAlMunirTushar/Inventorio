@@ -1,4 +1,4 @@
-const OTPModel = require('../../models/otpModel');
+const OTPModel = require('../../models/user/otpModel');
 const sendMail = require('../../utility/sendMail');
 
 const userVerifyEmail = async (request, dataModel) => {
