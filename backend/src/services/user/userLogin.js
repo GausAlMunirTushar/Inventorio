@@ -1,4 +1,4 @@
-const createToken = require('../../utility/createToken');
+const createToken = require('../../utils/createToken');
 
 const userLogin = async (request, dataModel) => {
     try {

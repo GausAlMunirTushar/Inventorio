@@ -1,12 +1,12 @@
 const OTPModel = require('../../models/user/otpModel');
-const sendMail = require('../../utility/sendMail');
+const sendMail = require('../../utils/sendMail');
 
 const userVerifyEmail = async (request, dataModel) => {
     try {
         // Email Account Query
         let email = request.params.email;
         let OTPCode = Math.floor(10000 + Math.random() * 90000)
-        let userCount = (await  dataModel.aggregate([{$match: {email: email}}, {$count: "total"}]))
+        let userCount = await  dataModel.aggregate([{$match: {email: email}}, {$count: "total"}])
         if(userCount.length > 0){
             //OTP Insert
             await OTPModel.create({
@@ -14,7 +14,7 @@ const userVerifyEmail = async (request, dataModel) => {
                 otp: OTPCode
             })
             // Send Mail
-            let sendMail = await sendMail(email, "Your PIN Code is " + OTPCode, "Inventro App Verification")
+            let sendMail = await sendMail(email, "Your PIN Code is " + OTPCode, "Inventorio App Verification")
             return {
                 status: "success",
                 data: sendMail

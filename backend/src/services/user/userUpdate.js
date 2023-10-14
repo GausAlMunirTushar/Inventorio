@@ -1,4 +1,3 @@
-const userLogin = require("./userLogin")
 
 const userUpdate = async (request, dataModel) => {
     try{
