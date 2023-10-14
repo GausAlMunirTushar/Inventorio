@@ -1,49 +1,45 @@
-const bodyParser = require('body-parser');
 const express = require('express');
-const connectDB = require('./src/config/database')
-const app = express();
-
-// Security Middlewares import
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
 const hpp = require('hpp');
 const cors = require('cors');
+const connectDB = require('./src/config/database');
 
-// Security Middlwares Implementation
+// Create an Express app
+const app = express();
+
+// Connect to the database
+connectDB();
+
+// Middleware stack for security
 app.use(helmet());
 app.use(mongoSanitize());
-app.use(xss());
 app.use(hpp());
 app.use(cors());
 
-app.use(express.json({limit: '50mb'}));
-
-// Database Connnection
-connectDB()
-// Body parser Implementation
-app.use(bodyParser.json())
+// Body parser for JSON
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({limit: '50mb'}));
 
 // Request Rate Limit
 const limiter = rateLimit({
-    windowMS: 15*60*1000,
-    max: 3000
+  windowMs: 15 * 60 * 1000,
+  max: 3000,
+});
+app.use(limiter);
+
+// Routes
+const userRoutes = require('./src/routes/userRoutes');
+app.use('/api/v1', userRoutes);
+
+// Not Found Handler
+app.use('*', (req, res) => {
+  res.status(404).json({
+    status: 'fail',
+    data: 'Not Found',
+  });
 });
 
-app.use(limiter)
-
-// Routes Import 
-const userRoutes = require('./src/routes/userRoutes')
-// Base Routing Implement
-app.use('/api/v1/', userRoutes);
-
-// Undefined Route Implement
-app.use('*', (req, res) => {
-    res.status(404).json({
-        status: "fail",
-        data: "Not Found"
-    })
-})
-
 module.exports = app;
+
